@@ -6,9 +6,9 @@
 using namespace std;
 typedef struct record;
 
-int opcio;
+int opcio;//Faig un int per guardar l'opcio que hagui triat l'usuari
 
-struct Equip
+struct Equip//Faig una estructura que guardara les dades del ciberequip introduit
 {
     string tipus;
     string nom;
@@ -17,9 +17,9 @@ struct Equip
     int perdua;
 };
 
-void mostrarLlista(const char* fileName) {
-    ifstream file(fileName, ios::binary);
-    if (!file) {
+void mostrarLlista(const char* fileName) {//Aquest void mostrara tota la llista de ciberparts disponibles
+    ifstream file(fileName, ios::binary);//Obro el fitxer de dades
+    if (!file) {//Si no pot obrir el fitxer salta un error
         cout << "No s'ha pogut obrir el fitxer." << endl;
         return;
     }
@@ -27,14 +27,14 @@ void mostrarLlista(const char* fileName) {
     string tipus, nom, instal;
     int preu, perdua;
 
-    while (file) {
+    while (file) {//Aqui es van llegint totes les ciberparts de la llista
         file.read(reinterpret_cast<char*>(&tipus), sizeof(tipus));
         file.read(reinterpret_cast<char*>(&nom), sizeof(nom));
         file.read(reinterpret_cast<char*>(&instal), sizeof(instal));
         file.read(reinterpret_cast<char*>(&preu), sizeof(preu));
         file.read(reinterpret_cast<char*>(&perdua), sizeof(perdua));
 
-        if (file) {
+        if (file) {//Aqui es van mostrant les ciberparts per pantalla
             cout << "------------------------" << endl;
             cout << "Tipus: " << tipus << endl;
             cout << "Nom: " << nom << endl;
@@ -45,10 +45,10 @@ void mostrarLlista(const char* fileName) {
         }
     }
 
-    file.close();
+    file.close();//Tenco el fitxer de dades
 }
 
-double calcularMitjanaPreus(const char* fileName) {
+double calcularMitjanaPreus(const char* fileName) {//Aquest codi llegeix la mitjana dels preus de totes les ciberparts
     ifstream file(fileName, ios::binary);
     if (!file) {
         cout << "No s'ha pogut obrir el fitxer." << endl;
@@ -59,7 +59,7 @@ double calcularMitjanaPreus(const char* fileName) {
     int numCiberparts = 0;
     int preu;
 
-    while (file) {
+    while (file) {//Aqui es van sumant els preus trobats per obtenir el total de la mitjana
         file.read(reinterpret_cast<char*>(&preu), sizeof(preu));
         if (file) {
             sumaPreus += preu;
@@ -69,7 +69,7 @@ double calcularMitjanaPreus(const char* fileName) {
 
     file.close();
 
-    if (numCiberparts == 0) {
+    if (numCiberparts == 0) {//Si no troba ciberparts mostra un zero
         return  0; 
     }
 
