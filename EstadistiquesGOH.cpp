@@ -48,11 +48,40 @@ void mostrarLlista(const char* fileName) {
     file.close();
 }
 
+double calcularMitjanaPreus(const char* fileName) {
+    ifstream file(fileName, ios::binary);
+    if (!file) {
+        cout << "No s'ha pogut obrir el fitxer." << endl;
+        return  0;
+    }
+
+    double sumaPreus = 0;
+    int numCiberparts = 0;
+    int preu;
+
+    while (file) {
+        file.read(reinterpret_cast<char*>(&preu), sizeof(preu));
+        if (file) {
+            sumaPreus += preu;
+            numCiberparts++;
+        }
+    }
+
+    file.close();
+
+    if (numCiberparts == 0) {
+        return  0; 
+    }
+
+    return sumaPreus / numCiberparts;
+}
+
 
 int main()
 {
     const char* fileName = "dades.dat";
     ofstream file(fileName, ios::app | ios::binary);
+    double mitjana = 0; 
 
     do {
         string tipus;
@@ -63,12 +92,13 @@ int main()
 
         cout << "1. Afegir mes ciberequip" << endl;
         cout << "2. Mostrar llista de ciberequip" << endl;
-        cout << "3. Sortir" << endl;
+        cout << "3. Mostrar mitjana dels preus del ciberequip" << endl;
+        cout << "4. Sortir" << endl;
         cin >> opcio;
 
         switch (opcio) {
 
-        case  1:
+        case   1:
             cout << "Benvingut al Seleccionador de Cyberequip!" << endl;
             cout << "Tipus de Cyberpart?" << endl;
             cout << "Cibermoda, Neuronal, Ciberoptics, Ciberaudio, Intern, Ciberextremitats?" << endl;
@@ -94,20 +124,27 @@ int main()
             file.write(reinterpret_cast<const char*>(&perdua), sizeof(perdua));
             file.close();
 
-            cout << "Afegir mes ciberequip?  1. Si  3. No" << endl;
+            cout << "Afegir mes ciberequip?   1. Si   3. No" << endl;
             cin >> opcio;
-            break; 
+            break;
 
         case   2:
             mostrarLlista(fileName);
             break;
 
-        case  3:
+        case   3:
+            mitjana = calcularMitjanaPreus(fileName);
+            if (mitjana != 0) {
+                cout << "La mitjana dels preus de totes les ciberparts es: " << mitjana << endl;
+            }
+            break;
+
+        case   4:
             cout << "Tencant sesio..." << endl;
             break;
         }
 
-    } while (opcio != 3);
+    } while (opcio != 4);
 
-    return  0;
+    return   0;
 }
